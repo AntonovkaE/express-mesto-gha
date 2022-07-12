@@ -1,0 +1,38 @@
+{
+  "name": "express-mesto-gha",
+  "version": "1.0.0",
+  "description": "project for learning backend",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "npx eslint ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AntonovkaE/express-mesto-gha.git"
+  },
+  "keywords": [
+    "JS",
+    "Node",
+    "Express"
+  ],
+  "author": "Antonovskaya Elvira",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AntonovkaE/express-mesto-gha/issues"
+  },
+  "homepage": "https://github.com/AntonovkaE/express-mesto-gha#readme",
+  "devDependencies": {
+    "eslint": "^8.19.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-jsx-a11y": "^6.6.0",
+    "eslint-plugin-react": "^7.30.1",
+    "eslint-plugin-react-hooks": "^4.6.0"
+  },
+  "dependencies": {
+    "nodemon": "^2.0.19"
+  }
+}
