@@ -8,7 +8,7 @@ const userSchema = new mongoose.Schema({
     maxlength: 30, // а максимальная — 30 символов
   },
   avatar: {
-    type: URL,
+    type: String,
     required: true,
   },
   about: {
