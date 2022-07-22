@@ -1,11 +1,11 @@
 const router = require('express').Router();
-const Card = require('../models/card');
-const { getCards, deleteCard, createCard } = require('../controllers/card');
+const { getCards, deleteCard, createCard, likeCard, dislikeCard} = require('../controllers/card');
 
-router.get('/cards', getCards)
-router.delete('/cards/:cardId', deleteCard)
-
-router.post('/cards', createCard);
+router.get('/', getCards)
+router.delete('/:id', deleteCard)
+router.post('/', createCard);
+router.put('/:id/likes', likeCard);
+router.delete('/:id/likes', dislikeCard)
 
 module.exports = router;
 
