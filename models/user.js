@@ -12,9 +12,9 @@ const userSchema = new mongoose.Schema({
     required: true,
   },
   about: {
-    String,
+    type: String,
     required: true,
   }
 });
 
-module.exports = mongoose.model('user', filmSchema)
+module.exports = mongoose.model('user', userSchema)
