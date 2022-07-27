@@ -6,7 +6,7 @@ const {
 module.exports.getCards = (req, res) => {
   Card.find({})
     .then((cards) => res.send(cards))
-    .catch(() => res.status(500).send({ message: 'Произошла ошибка' }));
+    .catch(() => sendDefaultError(res));
 };
 
 module.exports.deleteCard = (req, res) => {
@@ -17,7 +17,13 @@ module.exports.deleteCard = (req, res) => {
       }
       return res.send({ card });
     })
-    .catch(() => res.status(500).send({ message: 'Произошла ошибка' }));
+    .catch((err) => {
+      if (err.name === 'CastError') {
+        sendBadRequestError(res)
+        return
+      }
+      sendDefaultError(res)
+      })
 };
 
 module.exports.createCard = (req, res) => {
