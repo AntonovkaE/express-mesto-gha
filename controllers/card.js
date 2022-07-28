@@ -20,10 +20,10 @@ module.exports.deleteCard = (req, res) => {
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        return sendBadRequestError(res)
+        return sendBadRequestError(res);
       }
-      sendDefaultError(res)
-      })
+      return sendDefaultError(res);
+    });
 };
 
 module.exports.createCard = (req, res) => {

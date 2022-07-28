@@ -1,6 +1,6 @@
 const User = require('../models/user');
 const {
-  sendDefaultError, sendBadRequestError, sendNotFoundError, BAD_REQUEST_ERROR_CODE, BAD_REQUEST_MESSAGE,
+  sendDefaultError, sendBadRequestError, sendNotFoundError,
 } = require('../utils/error');
 
 module.exports.getUsers = (req, res) => {
@@ -21,10 +21,10 @@ module.exports.getUser = (req, res) => {
       return res.status(200).send({ user });
     })
     .catch((err) => {
-      if (err.name === "CastError") {
-        return sendBadRequestError(res)
+      if (err.name === 'CastError') {
+        return sendBadRequestError(res);
       }
-      sendDefaultError(res)
+      return sendDefaultError(res);
     });
 };
 
@@ -33,8 +33,7 @@ module.exports.createUser = (req, res) => {
     .then((user) => res.send(user))
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        return res.status(BAD_REQUEST_ERROR_CODE).send({ message: BAD_REQUEST_MESSAGE });
-        // return sendBadRequestError(res);
+        return sendBadRequestError(res);
       }
       return sendDefaultError(res);
     });
@@ -42,7 +41,7 @@ module.exports.createUser = (req, res) => {
 
 module.exports.updateUser = (req, res) => {
   const { name, about } = req.body;
-  User.findByIdAndUpdate(req.user._id, { name, about }, {runValidators: true, new: true })
+  User.findByIdAndUpdate(req.user._id, { name, about }, { runValidators: true, new: true })
     .then((user) => {
       if (!user) {
         return sendNotFoundError(res);
@@ -60,7 +59,7 @@ module.exports.updateUser = (req, res) => {
 
 module.exports.updateAvatar = (req, res) => {
   const { avatar } = req.body;
-  User.findByIdAndUpdate(req.user._id, { avatar }, {runValidators: true, new: true })
+  User.findByIdAndUpdate(req.user._id, { avatar }, { runValidators: true, new: true })
     .then((user) => {
       if (!user) {
         return sendNotFoundError(res);
