@@ -42,7 +42,7 @@ module.exports.createUser = (req, res) => {
 
 module.exports.updateUser = (req, res) => {
   const { name, about } = req.body;
-  User.findByIdAndUpdate(req.user._id, { name, about }, { new: true })
+  User.findByIdAndUpdate(req.user._id, { name, about }, {runValidators: true, new: true })
     .then((user) => {
       if (!user) {
         return sendNotFoundError(res);

@@ -4,8 +4,8 @@ const userSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
-    minlength: 2,
-    maxlength: 30,
+    minlength: [2, 'Должно быть минимум 2 символа'],
+    maxlength: [30, 'Максимум 30 символов'],
   },
   avatar: {
     type: String,
@@ -14,8 +14,8 @@ const userSchema = new mongoose.Schema({
   about: {
     type: String,
     required: true,
-    minlength: 2,
-    maxlength: 30,
+    minlength: [2, 'Должно быть минимум 2 символа'],
+    maxlength: [30, 'Максимум 30 символов'],
   },
 });
 
