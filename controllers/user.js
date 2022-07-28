@@ -51,7 +51,7 @@ module.exports.updateUser = (req, res) => {
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        res.status(400).send(req.user._id)
+        // res.status(400).send(req.user._id)
         return sendBadRequestError(res);
       }
       return sendDefaultError(res);
@@ -60,7 +60,7 @@ module.exports.updateUser = (req, res) => {
 
 module.exports.updateAvatar = (req, res) => {
   const { avatar } = req.body;
-  User.findByIdAndUpdate(req.user._id, { avatar }, { new: true })
+  User.findByIdAndUpdate(req.user._id, { avatar }, {runValidators: true, new: true })
     .then((user) => {
       if (!user) {
         return sendNotFoundError(res);
