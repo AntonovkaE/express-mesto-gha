@@ -49,7 +49,7 @@ module.exports.likeCard = (req, res) => Card.findByIdAndUpdate(
   }
   return res.send(card);
 }).catch((err) => {
-  if (err.name === 'ValidationError') {
+  if (err.name === 'CastError') {
     return sendBadRequestError(res);
   }
   return sendDefaultError(res);

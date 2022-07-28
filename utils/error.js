@@ -16,6 +16,8 @@ const sendNotFoundError = (res) => {
   res.status(DATA_NOT_FOUND_ERROR_CODE).send({ message: DATA_NOT_FOUND_MESSAGE });
 };
 module.exports = {
+  BAD_REQUEST_MESSAGE,
+  BAD_REQUEST_ERROR_CODE,
   DATA_NOT_FOUND_ERROR_CODE,
   DEFAULT_ERROR_CODE,
   DATA_NOT_FOUND_MESSAGE,
