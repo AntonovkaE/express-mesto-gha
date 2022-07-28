@@ -10,17 +10,17 @@ module.exports.getCards = (req, res) => {
 };
 
 module.exports.deleteCard = (req, res) => {
-  Card.deleteOne({ _id: req.params.id })
+  Card.findOneAndDelete({ _id: req.params.id })
     .then((card) => {
       if (!card) {
         return sendNotFoundError(res);
       }
+
       return res.send({ card });
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        sendBadRequestError(res)
-        return
+        return sendBadRequestError(res)
       }
       sendDefaultError(res)
       })
@@ -65,7 +65,7 @@ module.exports.dislikeCard = (req, res) => Card.findByIdAndUpdate(
   }
   return res.send(card);
 }).catch((err) => {
-  if (err.name === 'ValidationError') {
+  if (err.name === 'CastError') {
     return sendBadRequestError(res);
   }
   return sendDefaultError(res);
