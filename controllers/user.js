@@ -42,12 +42,12 @@ module.exports.createUser = (req, res) => {
 
 module.exports.updateUser = (req, res) => {
   const { name, about } = req.body;
-  User.findByIdAndUpdate(req.user._id, { name, about })
+  User.findByIdAndUpdate(req.user._id, { name, about }, {runValidators: true})
     .then((user) => {
       if (!user) {
         return sendNotFoundError(res);
       }
-      return res.status(200).send(user);
+      return res.status(200).send({ user });
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
