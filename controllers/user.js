@@ -1,4 +1,7 @@
 const User = require('../models/user');
+
+const bcrypt = require('bcryptjs');
+
 const {
   sendDefaultError, sendBadRequestError, sendNotFoundError,
 } = require('../utils/error');
@@ -29,8 +32,17 @@ module.exports.getUser = (req, res) => {
 };
 
 module.exports.createUser = (req, res) => {
-  const { name, about, avatar } = req.body;
-  User.create({ name, about, avatar })
+  const {
+    name, about, avatar, password, email,
+  } = req.body;
+  bcrypt.hash(password, 10)
+    .then((hash) => User.create({
+      email,
+      name,
+      avatar,
+      about,
+      password: hash,
+    }))
     .then((user) => res.send(user))
     .catch((err) => {
       if (err.name === 'ValidationError') {
