@@ -4,6 +4,8 @@ const bcrypt = require('bcrypt');
 
 const User = require('../models/user');
 
+const { userValidation} = require('../validations/user')
+
 const {
   sendDefaultError, sendBadRequestError, sendNotFoundError,
 } = require('../utils/error');
@@ -81,6 +83,10 @@ module.exports.createUser = (req, res) => {
 
 module.exports.updateUser = (req, res) => {
   const { name, about } = req.body;
+  const { error } = userValidation(req.body);
+  if (error) {
+    return res.status(401).send({ "message": "error" })
+  }
   User.findByIdAndUpdate(req.user._id, { name, about }, { runValidators: true, new: true })
     .then((user) => {
       if (!user) {

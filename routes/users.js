@@ -3,6 +3,7 @@ const {
   getUsers, getUser, updateUser, updateAvatar, deleteUser
 } = require('../controllers/user');
 
+
 router.get('/', getUsers);
 // router.get('/:id', getUser);
 router.get('/me', getUser);

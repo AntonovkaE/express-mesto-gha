@@ -7,7 +7,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
     select: false,
-    minlength: [2, 'Должно быть минимум 2 символа'],
+    minlength: [10, 'Должно быть минимум 2 символа'],
     maxlength: [30, 'Максимум 30 символов'],
     default: 'Жак-Ив Кусто',
   },
@@ -19,7 +19,7 @@ const userSchema = new mongoose.Schema({
   about: {
     type: String,
     required: true,
-    minlength: [2, 'Должно быть минимум 2 символа'],
+    minlength: [3, 'Должно быть минимум 2 символа'],
     maxlength: [30, 'Максимум 30 символов'],
     default: 'Исследователь',
   },
