@@ -1,6 +1,8 @@
-const User = require('../models/user');
 const jwt = require('jsonwebtoken');
-const bcrypt = require('bcryptjs');
+
+const bcrypt = require('bcrypt');
+
+const User = require('../models/user');
 
 const {
   sendDefaultError, sendBadRequestError, sendNotFoundError,
@@ -14,9 +16,26 @@ module.exports.getUsers = (req, res) => {
     .catch(() => sendDefaultError(res));
 };
 
+// module.exports.getUser = (req, res) => {
+//   const { id } = req.params;
+//   User.findById(id)
+//     .then((user) => {
+//       if (!user) {
+//         return sendNotFoundError(res);
+//       }
+//       return res.status(200).send({ user });
+//     })
+//     .catch((err) => {
+//       if (err.name === 'CastError') {
+//         return sendBadRequestError(res);
+//       }
+//       return sendDefaultError(res);
+//     });
+// };
+
 module.exports.getUser = (req, res) => {
-  const { id } = req.params;
-  User.findById(id)
+  const { id } = req.body;
+  User.findById(id).select('+password')
     .then((user) => {
       if (!user) {
         return sendNotFoundError(res);
@@ -30,6 +49,14 @@ module.exports.getUser = (req, res) => {
       return sendDefaultError(res);
     });
 };
+
+// module.exports.deleteUser = (req, res) => {
+//   const { id } = req.body;
+//   User.findByIdAndDelete(id)
+//     .then(user => {
+//       return res.status(200).send("удален")
+//     })
+// }
 
 module.exports.createUser = (req, res) => {
   const {
@@ -63,7 +90,6 @@ module.exports.updateUser = (req, res) => {
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        // res.status(400).send(req.user._id)
         return sendBadRequestError(res);
       }
       return sendDefaultError(res);
@@ -88,17 +114,13 @@ module.exports.updateAvatar = (req, res) => {
 };
 
 module.exports.login = (req, res) => {
-  const {email, password} = req.body;
+  const { email, password } = req.body;
   return User.findUserByCredentials(email, password)
     .then((user) => {
-      res.send({
-        token: jwt.sign({_id: user._id },
-          'super-strong-secret',
-          { expiresIn: '7d' }
-        ),
+      res.send({ token: jwt.sign({ _id: user._id }, 'super-strong-secret', { expiresIn: '7d' })
       })
-        .catch((err) => {
-          res.status(401).send({ message: err.message });
-        });
+    })
+    .catch((err) => {
+      res.status(401).send({ message: err.message });
     });
-};
+}
