@@ -4,7 +4,6 @@ const bcrypt = require('bcrypt');
 
 const User = require('../models/user');
 
-const { userValidation} = require('../validations/user')
 
 const {
   sendDefaultError, sendBadRequestError, sendNotFoundError,
@@ -36,7 +35,6 @@ module.exports.getUsers = (req, res) => {
 // };
 
 module.exports.getUser = (req, res) => {
-  // joinValidation (req, res)
   const { id } = req.body;
   User.findById(id).select('+password')
     .then((user) => {
@@ -62,14 +60,14 @@ module.exports.getUser = (req, res) => {
 // }
 
 module.exports.createUser = (req, res) => {
-  const { error } = userValidation(req.body);
-  if (error) {
-    console.log(error)
-    return res.status(400).send({ "message": "error" })
-  }
-  const {
-    name, about, avatar, password, email,
-  } = req.body;
+  // const { error } = userValidation(req.body);
+  // if (error) {
+  //   console.log(error)
+  //   return res.status(400).send({ "message": "error" })
+  // }
+  // const {
+  //   name, about, avatar, password, email,
+  // } = req.body;
   bcrypt.hash(password, 10)
     .then((hash) => User.create({
       email,
@@ -87,19 +85,8 @@ module.exports.createUser = (req, res) => {
     });
 };
 
-function joinValidation (req, res) {
-  const { error } = userValidation(req.body);
-  if (error) {
-    return res.status(401).send({ "message": "error" })
-  }
-}
-
 module.exports.updateUser = (req, res) => {
   const { name, about } = req.body;
-  const { error } = userValidation(req.body);
-  if (error) {
-    return res.status(401).send({ "message": "error" })
-  }
   User.findByIdAndUpdate(req.user._id, { name, about }, { runValidators: true, new: true })
     .then((user) => {
       if (!user) {
@@ -109,7 +96,6 @@ module.exports.updateUser = (req, res) => {
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        console.log(err)
         return sendBadRequestError(res);
       }
       return sendDefaultError(res);
@@ -117,7 +103,6 @@ module.exports.updateUser = (req, res) => {
 };
 
 module.exports.updateAvatar = (req, res) => {
-  joinValidation(req, res)
   const { avatar } = req.body;
   User.findByIdAndUpdate(req.user._id, { avatar }, { runValidators: true, new: true })
     .then((user) => {
@@ -136,13 +121,14 @@ module.exports.updateAvatar = (req, res) => {
 
 module.exports.login = (req, res) => {
   const { email, password } = req.body;
-  joinValidation(req, res)
   return User.findUserByCredentials(email, password)
     .then((user) => {
+      console.log(user)
       res.send({ token: jwt.sign({ _id: user._id }, 'super-strong-secret', { expiresIn: '7d' })
       })
     })
     .catch((err) => {
+      console.log(err)
       res.status(401).send({ message: err.message });
     });
-}
+};

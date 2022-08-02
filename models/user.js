@@ -2,13 +2,14 @@ const mongoose = require('mongoose');
 const isEmail = require('validator/lib/isEmail');
 const bcrypt = require('bcrypt');
 
+
 const userSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
-    // minlength: [1, 'Должно быть минимум 2 символа'],
-    // maxlength: [30, 'Максимум 30 символов'],
-    // default: 'Жак-Ив Кусто',
+    minlength: [1, 'Должно быть минимум 2 символа'],
+    maxlength: [30, 'Максимум 30 символов'],
+    default: 'Жак-Ив Кусто',
   },
   avatar: {
     type: String,
@@ -20,7 +21,7 @@ const userSchema = new mongoose.Schema({
     required: true,
     // minlength: [3, 'Должно быть минимум 2 символа'],
     // maxlength: [30, 'Максимум 30 символов'],
-    // default: 'Исследователь',
+    default: 'Исследователь',
   },
   email: {
     type: String,
@@ -32,14 +33,14 @@ const userSchema = new mongoose.Schema({
     },
   },
   password: {
-    select: false,
+    // select: false,
     type: String,
     required: true,
     minlength: 8,
   },
 });
 
-userSchema.statics.findUserByCredentials = function (email, password) {
+userSchema.statics.findUserByCredentials = function findUserByCredentials (email, password) {
   return this.findOne({ email })
     .then((user) => {
       if (!user) {
