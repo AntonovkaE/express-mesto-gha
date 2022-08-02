@@ -36,6 +36,7 @@ module.exports.getUsers = (req, res) => {
 // };
 
 module.exports.getUser = (req, res) => {
+  // joinValidation (req, res)
   const { id } = req.body;
   User.findById(id).select('+password')
     .then((user) => {
@@ -61,6 +62,7 @@ module.exports.getUser = (req, res) => {
 // }
 
 module.exports.createUser = (req, res) => {
+  joinValidation(req, res)
   const {
     name, about, avatar, password, email,
   } = req.body;
@@ -80,6 +82,13 @@ module.exports.createUser = (req, res) => {
       return sendDefaultError(res);
     });
 };
+
+function joinValidation (req, res) {
+  const { error } = userValidation(req.body);
+  if (error) {
+    return res.status(401).send({ "message": "error" })
+  }
+}
 
 module.exports.updateUser = (req, res) => {
   const { name, about } = req.body;
@@ -103,6 +112,7 @@ module.exports.updateUser = (req, res) => {
 };
 
 module.exports.updateAvatar = (req, res) => {
+  joinValidation(req, res)
   const { avatar } = req.body;
   User.findByIdAndUpdate(req.user._id, { avatar }, { runValidators: true, new: true })
     .then((user) => {
@@ -121,6 +131,7 @@ module.exports.updateAvatar = (req, res) => {
 
 module.exports.login = (req, res) => {
   const { email, password } = req.body;
+  joinValidation(req, res)
   return User.findUserByCredentials(email, password)
     .then((user) => {
       res.send({ token: jwt.sign({ _id: user._id }, 'super-strong-secret', { expiresIn: '7d' })
