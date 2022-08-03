@@ -60,14 +60,14 @@ module.exports.getUser = (req, res) => {
 // }
 
 module.exports.createUser = (req, res) => {
-  // const { error } = userValidation(req.body);
-  // if (error) {
-  //   console.log(error)
-  //   return res.status(400).send({ "message": "error" })
-  // }
-  // const {
-  //   name, about, avatar, password, email,
-  // } = req.body;
+  const {
+    name, about, avatar, password, email,
+  } = req.body;
+  User.findOne({ email: email })
+    .then((user) => {
+      res.status(409).send({ message: 'Пользователь с таким email существует' })
+      }
+    )
   bcrypt.hash(password, 10)
     .then((hash) => User.create({
       email,

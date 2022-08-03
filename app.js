@@ -56,10 +56,10 @@ app.post('/signup', celebrate({
   body: Joi.object().keys({
     email: Joi.string().required().email(),
     password: Joi.string().required().min(8),
-    name: Joi.string().required().min(2).max(30),
-    age: Joi.number().integer().required().min(18),
-    about: Joi.string().min(2).max(30),
-  })
+    name: Joi.string().min(2).max(30).default('Жак-Ив Кусто'),
+    avatar: Joi.string().('https://pictures.s3.yandex.net/resources/jacques-cousteau_1604399756.png').default('https://pictures.s3.yandex.net/resources/jacques-cousteau_1604399756.png'),
+    about: Joi.string().min(2).max(30).default('Исследователь'),
+  }).unknown(true),
 }), createUser);
 
 
