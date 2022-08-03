@@ -1,5 +1,4 @@
 const jwt = require('jsonwebtoken');
-const JWT_SECRET = 'secret';
 
 const handleAuthError = (res) => {
   res
@@ -16,7 +15,7 @@ module.exports = (req, res, next) => {
     return handleAuthError(res);
   }
 
-  const token = authorization.replace('Bearer ', '')
+  const token = authorization.replace('Bearer ', '');
   let payload;
 
   try {

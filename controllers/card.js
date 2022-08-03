@@ -20,7 +20,7 @@ module.exports.deleteCard = (req, res) => {
       if (card.owner === req.user._id) {
         card.remove({ _id: req.params.id })
           .then((removedCard) => {
-            res.send(removedCard);
+            return res.send(removedCard);
           })
           .catch((err) => {
             if (err.name === 'CastError') {
@@ -55,13 +55,13 @@ module.exports.deleteCard = (req, res) => {
 module.exports.createCard = (req, res) => {
   const {
     name,
-    link
+    link,
   } = req.body;
   const owner = req.user._id;
   Card.create({
     name,
     link,
-    owner
+    owner,
   })
     .then((card) => res.send({ card }))
     .catch((err) => {
