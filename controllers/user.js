@@ -19,26 +19,9 @@ module.exports.getUsers = (req, res) => {
     .catch(() => sendDefaultError(res));
 };
 
-// module.exports.getUser = (req, res) => {
-//   const { id } = req.params;
-//   User.findById(id)
-//     .then((user) => {
-//       if (!user) {
-//         return sendNotFoundError(res);
-//       }
-//       return res.status(200).send({ user });
-//     })
-//     .catch((err) => {
-//       if (err.name === 'CastError') {
-//         return sendBadRequestError(res);
-//       }
-//       return sendDefaultError(res);
-//     });
-// };
-
-module.exports.getUser = (req, res) => {
+module.exports.getCurrentUser = (req, res) => {
   const { id } = req.body;
-  User.find(id)
+  User.findById(id)
     // .select('+password')
     .then((user) => {
       if (!user) {
@@ -46,6 +29,24 @@ module.exports.getUser = (req, res) => {
       }
       return res.status(200)
         .send({ user });
+    })
+    .catch((err) => {
+      if (err.name === 'CastError') {
+        return sendBadRequestError(res);
+      }
+      console.log(err)
+      return sendDefaultError(res);
+    });
+};
+
+module.exports.getUser = (req, res) => {
+  const { id } = req.params;
+  User.findById(id)
+    .then((user) => {
+      if (!user) {
+        return sendNotFoundError(res);
+      }
+      return res.status(200).send({ user });
     })
     .catch((err) => {
       if (err.name === 'CastError') {
@@ -98,7 +99,6 @@ module.exports.createUser = (req, res) => {
       return sendDefaultError(res);
     });
 };
-
 module.exports.updateUser = (req, res) => {
   const {
     name,
@@ -151,7 +151,7 @@ module.exports.login = (req, res) => {
     email,
     password,
   } = req.body;
-  return User.findUserByCredentials(email, password).select('+password')
+  return User.findUserByCredentials(email, password)
     .then((user) => {
       res.send({ token: jwt.sign({ _id: user._id }, 'super-strong-secret', { expiresIn: '7d' }) });
     })
