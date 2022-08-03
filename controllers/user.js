@@ -39,7 +39,7 @@ module.exports.getUsers = (req, res) => {
 module.exports.getUser = (req, res) => {
   const { id } = req.body;
   User.findById(id)
-    .select('+password')
+    // .select('+password')
     .then((user) => {
       if (!user) {
         return sendNotFoundError(res);
@@ -86,11 +86,13 @@ module.exports.createUser = (req, res) => {
       about,
       password: hash,
     }))
-    .then((user) => res.send({ "name": name,
-    "avatar": avatar,
-    "about": about,
-    "email": email,
-    "_id": user._id}))
+    .then((user) => res.send({
+      name,
+      avatar,
+      about,
+      email,
+      _id: user._id,
+    }))
     .catch((err) => {
       if (err.name === 'ValidationError') {
         return sendBadRequestError(res);
