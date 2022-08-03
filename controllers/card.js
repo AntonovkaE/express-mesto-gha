@@ -18,7 +18,7 @@ module.exports.deleteCard = (req, res) => {
         return sendNotFoundError(res);
       }
       if (card.owner === req.user._id) {
-        card.remove({ _id: req.params.id })
+        return card.remove({ _id: req.params.id })
           .then((removedCard) => res.send(removedCard))
           .catch((err) => {
             if (err.name === 'CastError') {

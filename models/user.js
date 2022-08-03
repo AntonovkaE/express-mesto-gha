@@ -5,19 +5,16 @@ const bcrypt = require('bcrypt');
 const userSchema = new mongoose.Schema({
   name: {
     type: String,
-    required: true,
     minlength: [1, 'Должно быть минимум 2 символа'],
     maxlength: [30, 'Максимум 30 символов'],
     default: 'Жак-Ив Кусто',
   },
   avatar: {
     type: String,
-    required: true,
     default: 'https://pictures.s3.yandex.net/resources/jacques-cousteau_1604399756.png',
   },
   about: {
     type: String,
-    required: true,
     // minlength: [3, 'Должно быть минимум 2 символа'],
     // maxlength: [30, 'Максимум 30 символов'],
     default: 'Исследователь',
