@@ -38,7 +38,7 @@ module.exports.getUsers = (req, res) => {
 
 module.exports.getUser = (req, res) => {
   const { id } = req.body;
-  User.findById(id)
+  User.find(id)
     // .select('+password')
     .then((user) => {
       if (!user) {
@@ -86,13 +86,11 @@ module.exports.createUser = (req, res) => {
       about,
       password: hash,
     }))
-    .then((user) => res.send({
-      name,
-      avatar,
-      about,
-      email,
-      _id: user._id,
-    }))
+    .then((user) => res.send(
+      {
+        name, email, avatar, about, id: user._id,
+      },
+    ))
     .catch((err) => {
       if (err.name === 'ValidationError') {
         return sendBadRequestError(res);
@@ -153,7 +151,7 @@ module.exports.login = (req, res) => {
     email,
     password,
   } = req.body;
-  return User.findUserByCredentials(email, password)
+  return User.findUserByCredentials(email, password).select('+password')
     .then((user) => {
       res.send({ token: jwt.sign({ _id: user._id }, 'super-strong-secret', { expiresIn: '7d' }) });
     })
