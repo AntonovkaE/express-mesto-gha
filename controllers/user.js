@@ -58,13 +58,13 @@ module.exports.createUser = (req, res, next) => {
     password,
     email,
   } = req.body;
-  // User.findOne({ email })
-  //   .then((user) => {
-  //     if (user) {
-  //       res.status(409)
-  //         .send({ message: 'Пользователь с таким email существует' });
-  //     }
-  //   });
+  User.findOne({ email })
+    .then((user) => {
+      if (user) {
+        res.status(409)
+          .send({ message: 'Пользователь с таким email существует' });
+      }
+    });
   bcrypt.hash(password, 10)
     .then((hash) => User.create({
       email,
