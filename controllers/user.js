@@ -5,55 +5,41 @@ const bcrypt = require('bcrypt');
 const User = require('../models/user');
 
 const {
-  sendDefaultError,
-  sendBadRequestError,
-  sendNotFoundError,
+  NotFoundError,
 } = require('../utils/error');
 
-module.exports.getUsers = (req, res) => {
+module.exports.getUsers = (req, res, next) => {
   User.find({})
     .then((users) => {
       res.status(200)
         .send({ users });
     })
-    .catch(() => sendDefaultError(res));
+    .catch(next);
 };
 
-module.exports.getCurrentUser = (req, res) => {
-  const { id } = req.body;
+module.exports.getCurrentUser = (req, res, next) => {
+  const { id } = req.user._id;
   User.findById(id)
-    // .select('+password')
     .then((user) => {
       if (!user) {
-        return sendNotFoundError(res);
+        throw new NotFoundError('Пользователь не найден')
       }
       return res.status(200)
         .send({ user });
     })
-    .catch((err) => {
-      if (err.name === 'CastError') {
-        return sendBadRequestError(res);
-      }
-      console.log(err)
-      return sendDefaultError(res);
-    });
+    .catch(next);
 };
 
-module.exports.getUser = (req, res) => {
+module.exports.getUser = (req, res, next) => {
   const { id } = req.params;
   User.findById(id)
     .then((user) => {
       if (!user) {
-        return sendNotFoundError(res);
+        throw new NotFoundError('Нет пользователя с таким id');
       }
       return res.status(200).send({ user });
     })
-    .catch((err) => {
-      if (err.name === 'CastError') {
-        return sendBadRequestError(res);
-      }
-      return sendDefaultError(res);
-    });
+    .catch(next);
 };
 
 // module.exports.deleteUser = (req, res) => {
@@ -64,7 +50,7 @@ module.exports.getUser = (req, res) => {
 //     })
 // }
 
-module.exports.createUser = (req, res) => {
+module.exports.createUser = (req, res, next) => {
   const {
     name,
     about,
@@ -92,14 +78,9 @@ module.exports.createUser = (req, res) => {
         name, email, avatar, about, id: user._id,
       },
     ))
-    .catch((err) => {
-      if (err.name === 'ValidationError') {
-        return sendBadRequestError(res);
-      }
-      return sendDefaultError(res);
-    });
+    .catch(next)
 };
-module.exports.updateUser = (req, res) => {
+module.exports.updateUser = (req, res, next) => {
   const {
     name,
     about,
@@ -113,20 +94,15 @@ module.exports.updateUser = (req, res) => {
   })
     .then((user) => {
       if (!user) {
-        return sendNotFoundError(res);
+        throw new NotFoundError('Нет пользователя с таким id');
       }
       return res.status(200)
         .send({ user });
     })
-    .catch((err) => {
-      if (err.name === 'ValidationError') {
-        return sendBadRequestError(res);
-      }
-      return sendDefaultError(res);
-    });
+    .catch(next)
 };
 
-module.exports.updateAvatar = (req, res) => {
+module.exports.updateAvatar = (req, res, next) => {
   const { avatar } = req.body;
   User.findByIdAndUpdate(req.user._id, { avatar }, {
     runValidators: true,
@@ -134,16 +110,11 @@ module.exports.updateAvatar = (req, res) => {
   })
     .then((user) => {
       if (!user) {
-        return sendNotFoundError(res);
+        throw new NotFoundError('Нет пользователя с таким id');
       }
       return res.send(user);
     })
-    .catch((err) => {
-      if (err.name === 'ValidationError') {
-        return sendBadRequestError(res);
-      }
-      return sendDefaultError(res);
-    });
+    .catch(next);
 };
 
 module.exports.login = (req, res) => {

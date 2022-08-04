@@ -6,7 +6,9 @@ const {
   celebrate,
   Joi,
 } = require('celebrate');
-const { sendNotFoundError } = require('./utils/error');
+const { BadRequest, DefaultError,
+  sendBadRequestError,
+} = require('./utils/error');
 const {
   login,
   createUser,
@@ -77,5 +79,13 @@ app.use('/', (req, res) => {
   sendNotFoundError(res);
 });
 app.use(errors());
+
+app.use((err, req, res, next) => {
+  if (err.name === 'CastError' || err.name === 'ValidationError') {
+    throw new BadRequest('Переданы некорректные данные')
+  }
+  res.send({ message: err.message });
+
+});
 
 app.listen(PORT);
