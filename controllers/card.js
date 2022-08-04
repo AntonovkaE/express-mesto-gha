@@ -15,11 +15,12 @@ module.exports.deleteCard = (req, res, next) => {
       if (!card) {
         throw new NotFoundError('Карточки с таким не существует');
       }
-      if (card.owner === req.user._id) {
-        return card.remove({ _id: req.params.id })
-          .then((removedCard) => res.send(removedCard));
-      }
+      // if (card.owner === req.user._id) {
+      return card.remove({ _id: req.params.id })
+        .then((removedCard) => res.send(removedCard));
+      // }
     })
+
     .catch(next);
 };
 
@@ -49,6 +50,7 @@ module.exports.createCard = (req, res, next) => {
     link,
   } = req.body;
   const owner = req.user._id;
+  console.log(owner)
   Card.create({
     name,
     link,

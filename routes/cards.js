@@ -13,7 +13,12 @@ const {
 } = require('../controllers/card');
 
 router.get('/', getCards);
-router.delete('/:id', deleteCard);
+router.delete('/:id', celebrate({
+  // валидируем параметры
+  params: Joi.object().keys({
+    id: Joi.string().alphanum().length(24),
+  }),
+}), deleteCard);
 router.post('/', celebrate({
   body: Joi.object()
     .keys({
@@ -26,7 +31,17 @@ router.post('/', celebrate({
         .pattern(/^(ftp|http|https):\/\/[^ "]+$/),
     }),
 }), createCard);
-router.put('/:id/likes', likeCard);
-router.delete('/:id/likes', dislikeCard);
+router.put('/:id/likes', celebrate({
+  // валидируем параметры
+  params: Joi.object().keys({
+    id: Joi.string().alphanum().length(24),
+  }),
+}), likeCard);
+router.delete('/:id/likes', celebrate({
+  // валидируем параметры
+  params: Joi.object().keys({
+    id: Joi.string().alphanum().length(24),
+  }),
+}), dislikeCard);
 
 module.exports = router;
