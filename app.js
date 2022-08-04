@@ -6,8 +6,9 @@ const {
   celebrate,
   Joi,
 } = require('celebrate');
-const { BadRequest, DefaultError,
-  sendBadRequestError,
+const {
+  BadRequest,
+  NotFoundError,
 } = require('./utils/error');
 const {
   login,
@@ -49,24 +50,39 @@ mongoose.connect('mongodb://localhost:27017/mestodb');
 //   if (err) throw err;
 // })();
 
-
 app.post('/signin', celebrate({
-  body: Joi.object().keys({
-    email: Joi.string().required().email(),
-    password: Joi.string().required().min(8),
-  }),
+  body: Joi.object()
+    .keys({
+      email: Joi.string()
+        .required()
+        .email(),
+      password: Joi.string()
+        .required()
+        .min(8),
+    }),
 }), login);
 app.post('/signup', celebrate({
-  body: Joi.object().keys({
-    email: Joi.string().required().email(),
-    password: Joi.string().required().min(8),
-    name: Joi.string().min(2).max(30)
-      .default('Жак-Ив Кусто'),
-    avatar: Joi.string()
-      .default('https://pictures.s3.yandex.net/resources/jacques-cousteau_1604399756.png').pattern(/^(ftp|http|https):\/\/[^ "]+$/),
-    about: Joi.string().min(2).max(30)
-      .default('Исследователь'),
-  }).unknown(true),
+  body: Joi.object()
+    .keys({
+      email: Joi.string()
+        .required()
+        .email(),
+      password: Joi.string()
+        .required()
+        .min(8),
+      name: Joi.string()
+        .min(2)
+        .max(30)
+        .default('Жак-Ив Кусто'),
+      avatar: Joi.string()
+        .default('https://pictures.s3.yandex.net/resources/jacques-cousteau_1604399756.png')
+        .pattern(/^(ftp|http|https):\/\/[^ "]+$/),
+      about: Joi.string()
+        .min(2)
+        .max(30)
+        .default('Исследователь'),
+    })
+    .unknown(true),
 }), createUser);
 
 app.use(auth);
@@ -76,16 +92,14 @@ app.use('/users', require('./routes/users'));
 app.use('/cards', require('./routes/cards'));
 
 app.use('/', (req, res) => {
-  sendNotFoundError(res);
+  throw new NotFoundError('Страница не найдена');
 });
 app.use(errors());
 
 app.use((err, req, res, next) => {
   if (err.name === 'CastError' || err.name === 'ValidationError') {
-    throw new BadRequest('Переданы некорректные данные')
-  }
-  res.send({ message: err.message });
-
+    throw new BadRequest('Переданы некорректные данные');
+  };
 });
 
 app.listen(PORT);

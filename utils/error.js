@@ -1,11 +1,7 @@
 const BAD_REQUEST_ERROR_CODE = 400;
-const UNAUTHORIZED_CODE = 401;
+// const UNAUTHORIZED_CODE = 401;
 const DATA_NOT_FOUND_ERROR_CODE = 404;
 const DEFAULT_ERROR_CODE = 500;
-
-const BAD_REQUEST_MESSAGE = ;
-const DATA_NOT_FOUND_MESSAGE = 'Данные не найдены';
-const DEFAULT_ERROR_MESSAGE = 'На сервере произошла ошибка';
 
 class NotFoundError extends Error {
   constructor(message) {
@@ -28,14 +24,14 @@ class DefaultError extends Error {
   }
 }
 
-class Unauthorized extends Error {
-  constructor(message) {
-    super(message);
-    this.statusCode = UNAUTHORIZED_CODE;
-  }
-}
+// class Unauthorized extends Error {
+//   constructor(message) {
+//     super(message);
+//     this.statusCode = UNAUTHORIZED_CODE;
+//   }
+// }
 
-module.exports = { NotFoundError, BadRequest, DefaultError, Unauthorized, };
+module.exports = { NotFoundError, BadRequest, DefaultError };
 
 // const sendDefaultError = (res) => {
 //   res.status(DEFAULT_ERROR_CODE).send({ message: DEFAULT_ERROR_MESSAGE });

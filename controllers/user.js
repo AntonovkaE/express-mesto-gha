@@ -22,7 +22,7 @@ module.exports.getCurrentUser = (req, res, next) => {
   User.findById(id)
     .then((user) => {
       if (!user) {
-        throw new NotFoundError('Пользователь не найден')
+        throw new NotFoundError('Пользователь не найден');
       }
       return res.status(200)
         .send({ user });
@@ -78,7 +78,7 @@ module.exports.createUser = (req, res, next) => {
         name, email, avatar, about, id: user._id,
       },
     ))
-    .catch(next)
+    .catch(next);
 };
 module.exports.updateUser = (req, res, next) => {
   const {
@@ -99,7 +99,7 @@ module.exports.updateUser = (req, res, next) => {
       return res.status(200)
         .send({ user });
     })
-    .catch(next)
+    .catch(next);
 };
 
 module.exports.updateAvatar = (req, res, next) => {

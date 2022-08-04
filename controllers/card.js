@@ -17,10 +17,10 @@ module.exports.deleteCard = (req, res, next) => {
       }
       if (card.owner === req.user._id) {
         return card.remove({ _id: req.params.id })
-          .then((removedCard) => res.send(removedCard))
-          .catch(next);
+          .then((removedCard) => res.send(removedCard));
       }
-    });
+    })
+    .catch(next);
 };
 
 // .then((card) => {
