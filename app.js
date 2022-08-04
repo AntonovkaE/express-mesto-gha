@@ -98,9 +98,12 @@ app.use(errors());
 
 app.use((err, req, res, next) => {
   if (err.name === 'CastError' || err.name === 'ValidationError') {
-    return res.status(400).send({ "message": "Переданы некорректные данные" });
+    return res.status(400).send({ message: 'Переданы некорректные данные' });
   };
-  return res.status(500).send({ "message": "ошибка на сервере" })
+  if (err.code === 11000) {
+    return res.status(409).send({ message: 'Пользователь с таким email существует'});
+  }
+  return res.status(500).send({ message: 'ошибка на сервере' });
 });
 
 app.listen(PORT);
