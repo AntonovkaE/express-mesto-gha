@@ -98,7 +98,7 @@ app.use(errors());
 
 app.use((err, req, res, next) => {
   if (err.name === 'CastError' || err.name === 'ValidationError') {
-    throw new BadRequest('Переданы некорректные данные');
+    res.status(400).send({ "message": "Переданы некорректные данные" });
   };
 });
 

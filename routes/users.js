@@ -5,7 +5,12 @@ const {
 } = require('../controllers/user');
 
 router.get('/me', getCurrentUser);
-router.get('/:id', getUser);
+router.get('/:id', celebrate({
+  // валидируем параметры
+  params: Joi.object().keys({
+    id: Joi.string().alphanum().length(24),
+  }),
+}), getUser);
 router.patch('/me', celebrate({
   body: Joi.object().keys({
     name: Joi.string().min(2).max(30).required(),
