@@ -8,7 +8,7 @@ const {
 } = require('celebrate');
 const {
   NotFoundError,
-} = require('./utils/error');
+} = require('./utils/errors/NotFoundError');
 const {
   login,
   createUser,
