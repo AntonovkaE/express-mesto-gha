@@ -15,34 +15,14 @@ module.exports.deleteCard = (req, res, next) => {
       if (!card) {
         throw new NotFoundError('Карточки с таким не существует');
       }
-      // if (card.owner === req.user._id) {
-      return card.remove({ _id: req.params.id })
-        .then((removedCard) => res.send(removedCard));
-      // }
+      if (String(card.owner) === req.user._id) {
+        return card.remove({ _id: req.params.id })
+          .then((removedCard) => res.send(removedCard));
+      }
     })
 
     .catch(next);
 };
-
-// .then((card) => {
-// res.send(req)})
-//   if (req.user._id === owner) {
-//   }
-//   Card.findOneAndDelete({ _id: req.params.id })
-//     .then((card) => {
-//       if (!card) {
-//         return sendNotFoundError(res);
-//       }
-//
-//       return res.send({ card });
-//     })
-//     .catch((err) => {
-//       if (err.name === 'CastError') {
-//         return sendBadRequestError(res);
-//       }
-//       return sendDefaultError(res);
-//     });
-// };
 
 module.exports.createCard = (req, res, next) => {
   const {
