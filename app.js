@@ -22,32 +22,6 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 mongoose.connect('mongodb://localhost:27017/mestodb');
-// app.use((req, res, next) => {
-//   req.user = {
-//     _id: '62da8198b3e1d1a53fca6734',
-//   };
-//   next();
-// });
-
-// var db = mongoose.connection;
-//
-// db.on('error', function() {
-//   return console.error.bind(console, 'connection error: ');
-// });
-//
-// db.once('open', function() {
-//   var User;
-//   return User = require('./user.js');
-// });
-//
-// // Validate a user
-// (function() {
-//   var User = require('./models/user');
-//   var me = { username: 'foo' };
-//   var user = new User(me);
-//   var err = user.joiValidate(me);
-//   if (err) throw err;
-// })();
 
 app.post('/signin', celebrate({
   body: Joi.object()
