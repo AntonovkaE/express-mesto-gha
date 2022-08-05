@@ -8,7 +8,7 @@ const {
 } = require('celebrate');
 const {
   NotFoundError,
-} = require('./utils/error');
+} = require('./utils/errors/NotFoundError');
 const {
   login,
   createUser,
@@ -22,32 +22,6 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 mongoose.connect('mongodb://localhost:27017/mestodb');
-// app.use((req, res, next) => {
-//   req.user = {
-//     _id: '62da8198b3e1d1a53fca6734',
-//   };
-//   next();
-// });
-
-// var db = mongoose.connection;
-//
-// db.on('error', function() {
-//   return console.error.bind(console, 'connection error: ');
-// });
-//
-// db.once('open', function() {
-//   var User;
-//   return User = require('./user.js');
-// });
-//
-// // Validate a user
-// (function() {
-//   var User = require('./models/user');
-//   var me = { username: 'foo' };
-//   var user = new User(me);
-//   var err = user.joiValidate(me);
-//   if (err) throw err;
-// })();
 
 app.post('/signin', celebrate({
   body: Joi.object()
@@ -90,22 +64,21 @@ app.use('/users', require('./routes/users'));
 
 app.use('/cards', require('./routes/cards'));
 
-app.use('/', (req, res) => {
+app.use('/', () => {
   throw new NotFoundError('Страница не найдена');
 });
 app.use(errors());
 
 app.use((err, req, res, next) => {
-  console.log(err)
   const { statusCode = 500, message } = err;
   if (err.name === 'CastError' || err.name === 'ValidationError') {
     return res.status(400).send({ message: 'Переданы некорректные данные' });
-  };
+  }
   if (err.code === 11000) {
-    return res.status(409).send({ message: 'Пользователь с таким email существует'});
+    return res.status(409).send({ message: 'Пользователь с таким email существует' });
   }
   res.status(statusCode).send({ message: statusCode === 500 ? 'ошибка на сервере' : message });
-  next();
+  return next();
 });
 
 app.listen(PORT);

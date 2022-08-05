@@ -23,6 +23,5 @@ router.patch('/me/avatar', celebrate({
   }),
 }), updateAvatar);
 router.get('/', getUsers);
-// router.delete('/', deleteUser)
 
 module.exports = router;

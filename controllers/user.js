@@ -6,7 +6,7 @@ const User = require('../models/user');
 
 const {
   NotFoundError,
-} = require('../utils/error');
+} = require('../utils/errors/NotFoundError');
 
 module.exports.getUsers = (req, res, next) => {
   User.find({})
@@ -18,7 +18,6 @@ module.exports.getUsers = (req, res, next) => {
 };
 
 module.exports.getCurrentUser = (req, res, next) => {
-  // const { id } = req.user._id;
   User.findById(req.user._id)
     .then((user) => {
       if (!user) {
@@ -58,13 +57,6 @@ module.exports.createUser = (req, res, next) => {
     password,
     email,
   } = req.body;
-  // User.findOne({ email })
-  //   .then((user) => {
-  //     if (user) {
-  //       res.status(409)
-  //         .send({ message: 'Пользователь с таким email существует' });
-  //     }
-  //   });
   bcrypt.hash(password, 10)
     .then((hash) => User.create({
       email,

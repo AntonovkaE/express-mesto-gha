@@ -15,8 +15,8 @@ const userSchema = new mongoose.Schema({
   },
   about: {
     type: String,
-    // minlength: [3, 'Должно быть минимум 2 символа'],
-    // maxlength: [30, 'Максимум 30 символов'],
+    minlength: [3, 'Должно быть минимум 2 символа'],
+    maxlength: [30, 'Максимум 30 символов'],
     default: 'Исследователь',
   },
   email: {
