@@ -97,13 +97,15 @@ app.use(errors());
 
 app.use((err, req, res, next) => {
   console.log(err)
+  const { statusCode = 500, message } = err;
   if (err.name === 'CastError' || err.name === 'ValidationError') {
     return res.status(400).send({ message: 'Переданы некорректные данные' });
   };
   if (err.code === 11000) {
     return res.status(409).send({ message: 'Пользователь с таким email существует'});
   }
-  return res.status(500).send({ message: 'ошибка на сервере' });
+  res.status(statusCode).send({ message: statusCode === 500 ? 'ошибка на сервере' : message });
+  next();
 });
 
 app.listen(PORT);

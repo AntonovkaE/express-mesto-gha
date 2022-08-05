@@ -6,9 +6,8 @@ const {
 
 router.get('/me', getCurrentUser);
 router.get('/:id', celebrate({
-  // валидируем параметры
   params: Joi.object().keys({
-    id: Joi.string().alphanum().length(24),
+    id: Joi.string().alphanum().hex().length(24),
   }),
 }), getUser);
 router.patch('/me', celebrate({
