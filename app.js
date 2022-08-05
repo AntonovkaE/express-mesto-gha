@@ -64,7 +64,7 @@ app.use('/users', require('./routes/users'));
 
 app.use('/cards', require('./routes/cards'));
 
-app.use('/', () => {
+app.use('/', (req, res) => {
   throw new NotFoundError('Страница не найдена');
 });
 app.use(errors());
@@ -78,7 +78,7 @@ app.use((err, req, res, next) => {
     return res.status(409).send({ message: 'Пользователь с таким email существует' });
   }
   res.status(statusCode).send({ message: statusCode === 500 ? 'ошибка на сервере' : message });
-  return next();
+  next();
 });
 
 app.listen(PORT);
