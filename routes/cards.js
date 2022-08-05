@@ -32,13 +32,11 @@ router.post('/', celebrate({
     }),
 }), createCard);
 router.put('/:id/likes', celebrate({
-  // валидируем параметры
   params: Joi.object().keys({
     id: Joi.string().alphanum().length(24),
   }),
 }), likeCard);
 router.delete('/:id/likes', celebrate({
-  // валидируем параметры
   params: Joi.object().keys({
     id: Joi.string().alphanum().length(24),
   }),
