@@ -20,10 +20,11 @@ module.exports.getUsers = (req, res, next) => {
 module.exports.getCurrentUser = (req, res, next) => {
   // const { id } = req.user._id;
   User.findById(req.user._id)
+    .orFail(new NotFoundError('Нет пользователя с таким id'))
     .then((user) => {
-      if (!user) {
-        throw new NotFoundError('Пользователь не найден');
-      }
+      // if (!user) {
+      //   throw new NotFoundError('Пользователь не найден');
+      // }
       return res.status(200)
         .send({ user });
     })
@@ -32,11 +33,10 @@ module.exports.getCurrentUser = (req, res, next) => {
 
 module.exports.getUser = (req, res, next) => {
   const { id } = req.params;
+
   User.findById(id)
+    .orFail(new NotFoundError('Нет пользователя с таким id'))
     .then((user) => {
-      if (!user) {
-        throw new NotFoundError('Нет пользователя с таким id');
-      }
       return res.status(200).send({ user });
     })
     .catch(next);
@@ -92,10 +92,11 @@ module.exports.updateUser = (req, res, next) => {
     runValidators: true,
     new: true,
   })
+    .orFail(new NotFoundError('Нет пользователя с таким id'))
     .then((user) => {
-      if (!user) {
-        throw new NotFoundError('Нет пользователя с таким id');
-      }
+      // if (!user) {
+      //   throw new NotFoundError('Нет пользователя с таким id');
+      // }
       return res.status(200)
         .send({ user });
     })
@@ -108,10 +109,11 @@ module.exports.updateAvatar = (req, res, next) => {
     runValidators: true,
     new: true,
   })
+    .orFail(new NotFoundError('Нет пользователя с таким id'))
     .then((user) => {
-      if (!user) {
-        throw new NotFoundError('Нет пользователя с таким id');
-      }
+      // if (!user) {
+      //   throw new NotFoundError('Нет пользователя с таким id');
+      // }
       return res.send(user);
     })
     .catch(next);

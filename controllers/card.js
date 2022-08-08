@@ -12,10 +12,11 @@ module.exports.getCards = (req, res, next) => {
 
 module.exports.deleteCard = (req, res, next) => {
   Card.findById(req.params.id)
+    .orFail(new NotFoundError('Карточки с таким не существует'))
     .then((card) => {
-      if (!card) {
-        throw new NotFoundError('Карточки с таким не существует');
-      }
+      // if (!card) {
+      //   throw new NotFoundError('Карточки с таким не существует');
+      // }
       if (String(card.owner) !== req.user._id) {
         throw new ForbiddenError('Нельзя удалять чужую карточку');
       }
@@ -47,10 +48,11 @@ module.exports.likeCard = (req, res, next) => {
     { $addToSet: { likes: req.user._id } }, // добавить _id в массив, если его там нет
     { new: true },
   )
+    .orFail(new NotFoundError('Карточка не найдена'))
     .then((card) => {
-      if (!card) {
-        throw new NotFoundError('Карточка не найдена');
-      }
+      // if (!card) {
+      //   throw new NotFoundError('Карточка не найдена');
+      // }
       return res.send(card);
     })
     .catch(next);
@@ -62,10 +64,11 @@ module.exports.dislikeCard = (req, res, next) => {
     { $pull: { likes: req.user._id } }, // убрать _id из массива
     { new: true },
   )
+    .orFail(new NotFoundError('Карточка не найдена'))
     .then((card) => {
-      if (!card) {
-        throw new NotFoundError('Карточка не найдена');
-      }
+      // if (!card) {
+      //   throw new NotFoundError('Карточка не найдена');
+      // }
       return res.send(card);
     })
     .catch(next);

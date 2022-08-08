@@ -7,7 +7,7 @@ const {
 router.get('/me', getCurrentUser);
 router.get('/:id', celebrate({
   params: Joi.object().keys({
-    id: Joi.string().alphanum().hex().length(24),
+    id: Joi.string().length(24).hex(),
   }),
 }), getUser);
 router.patch('/me', celebrate({
