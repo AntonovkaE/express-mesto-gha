@@ -1,7 +1,8 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
-const rateLimit = require('express-rate-limit')
+const rateLimit = require('express-rate-limit');
+const helmet = require('helmet');
 const {
   errors,
   celebrate,
@@ -27,6 +28,7 @@ const limiter = rateLimit({
 });
 
 app.use(limiter);
+app.use(helmet());
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
