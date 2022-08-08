@@ -10,7 +10,7 @@ module.exports.validateSignIn = celebrate({
         .required()
         .min(8),
     }),
-})
+});
 
 module.exports.validateSignUp = celebrate({
   body: Joi.object()

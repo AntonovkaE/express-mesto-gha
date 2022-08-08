@@ -5,8 +5,6 @@ const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
 const {
   errors,
-  celebrate,
-  Joi,
 } = require('celebrate');
 const {
   NotFoundError,
@@ -16,7 +14,7 @@ const {
   createUser,
 } = require('./controllers/user');
 const auth = require('./middlewares/auth');
-const { validateSignUp, validateSignIn } = require("./utils/validation");
+const { validateSignUp, validateSignIn } = require('./utils/validation');
 
 const { PORT = 3000 } = process.env;
 const app = express();

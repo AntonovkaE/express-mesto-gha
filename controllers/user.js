@@ -10,24 +10,14 @@ const {
 
 module.exports.getUsers = (req, res, next) => {
   User.find({})
-    .then((users) => {
-      res.status(200)
-        .send({ users });
-    })
+    .then((users) => res.status(200).send({ users }))
     .catch(next);
 };
 
 module.exports.getCurrentUser = (req, res, next) => {
-  // const { id } = req.user._id;
   User.findById(req.user._id)
     .orFail(new NotFoundError('Нет пользователя с таким id'))
-    .then((user) => {
-      // if (!user) {
-      //   throw new NotFoundError('Пользователь не найден');
-      // }
-      return res.status(200)
-        .send({ user });
-    })
+    .then((user) => res.status(200).send({ user }))
     .catch(next);
 };
 
@@ -36,9 +26,7 @@ module.exports.getUser = (req, res, next) => {
 
   User.findById(id)
     .orFail(new NotFoundError('Нет пользователя с таким id'))
-    .then((user) => {
-      return res.status(200).send({ user });
-    })
+    .then((user) => res.status(200).send({ user }))
     .catch(next);
 };
 
@@ -58,13 +46,6 @@ module.exports.createUser = (req, res, next) => {
     password,
     email,
   } = req.body;
-  // User.findOne({ email })
-  //   .then((user) => {
-  //     if (user) {
-  //       res.status(409)
-  //         .send({ message: 'Пользователь с таким email существует' });
-  //     }
-  //   });
   bcrypt.hash(password, 10)
     .then((hash) => User.create({
       email,
@@ -93,13 +74,7 @@ module.exports.updateUser = (req, res, next) => {
     new: true,
   })
     .orFail(new NotFoundError('Нет пользователя с таким id'))
-    .then((user) => {
-      // if (!user) {
-      //   throw new NotFoundError('Нет пользователя с таким id');
-      // }
-      return res.status(200)
-        .send({ user });
-    })
+    .then((user) => res.status(200).send({ user }))
     .catch(next);
 };
 
@@ -110,12 +85,7 @@ module.exports.updateAvatar = (req, res, next) => {
     new: true,
   })
     .orFail(new NotFoundError('Нет пользователя с таким id'))
-    .then((user) => {
-      // if (!user) {
-      //   throw new NotFoundError('Нет пользователя с таким id');
-      // }
-      return res.send(user);
-    })
+    .then((user) => res.send(user))
     .catch(next);
 };
 
